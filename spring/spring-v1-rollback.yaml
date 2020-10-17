@@ -1,0 +1,28 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: cloud-conference-day-spring
+spec:
+  template:
+    metadata:
+      name: cloud-conference-day-spring-v2
+      annotations:
+        autoscaling.knative.dev/minScale: "1"
+        autoscaling.knative.dev/maxScale: "3"
+    spec:
+      containers:
+        - image: claudioed/cloud-conference-day-spring
+          env:
+            - name: MESSAGE_DATA
+              value: "spring v2"
+          ports:
+            - name: http1
+              containerPort: 8080
+              protocol: TCP
+  traffic:
+    - tag: current
+      revisionName: cloud-conference-day-spring-v1
+      percent: 100
+    - tag: candidate-failed
+      revisionName: cloud-conference-day-spring-v2
+      percent: 0

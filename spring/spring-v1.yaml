@@ -1,0 +1,21 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: cloud-conference-day-spring
+spec:
+  template:
+    metadata:
+      name: cloud-conference-day-spring-v1
+      annotations:
+        autoscaling.knative.dev/minScale: "1"
+        autoscaling.knative.dev/maxScale: "3"
+    spec:
+      containers:
+        - image: claudioed/cloud-conference-day-spring
+          env:
+            - name: MESSAGE_DATA
+              value: "spring"
+          ports:
+            - name: http1
+              containerPort: 8080
+              protocol: TCP

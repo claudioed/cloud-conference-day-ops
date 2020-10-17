@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    version: v1
+    app: cloud-conference-day-quarkus
+  name: cloud-conference-day-quarkus
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: cloud-conference-day-quarkus
+  template:
+    metadata:
+      labels:
+        app: cloud-conference-day-quarkus
+        version: v1
+    spec:
+      containers:
+        - image: claudioed/cloud-conference-day-quarkus
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: cloud-conference-day-quarkus-config
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "800m"
+            limits:
+              memory: "256Mi"
+              cpu: "1000m"
+          name: cloud-conference-day-quarkus
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          securityContext:
+            privileged: false

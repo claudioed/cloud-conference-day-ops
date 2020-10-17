@@ -1,0 +1,15 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  labels:
+    app: cloud-conference-day-quarkus
+  name: cloud-conference-day-quarkus
+spec:
+  virtualhost:
+    fqdn: cloud-conference-day-quarkus.local
+  routes:
+    - services:
+        - name: cloud-conference-day-quarkus
+          port: 8080
+      conditions:
+        - prefix: /
